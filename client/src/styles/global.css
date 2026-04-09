@@ -1,0 +1,403 @@
+/**
+ * Global Styles — Adaptive Fitness Coach
+ *
+ * Aesthetic direction: industrial/performance — deep slate backgrounds,
+ * high-contrast amber accent, Barlow Condensed for display numerics,
+ * Barlow for body. Feels like the inside of a performance lab, not a
+ * consumer wellness app.
+ */
+
+/* ── Design tokens ────────────────────────────────────────────────────────── */
+
+:root {
+  /* Background scale */
+  --bg-base:    #0a0f1e;   /* deep navy — primary surface               */
+  --bg-raised:  #111827;   /* slightly lifted cards                      */
+  --bg-hover:   #1c2333;   /* hover/active states                        */
+  --bg-border:  #1f2937;   /* subtle borders                             */
+
+  /* Text scale */
+  --text-primary:   #f0f4ff;   /* near-white — primary content           */
+  --text-secondary: #8897b8;   /* muted — labels, metadata               */
+  --text-tertiary:  #4a5568;   /* very muted — disabled, placeholders    */
+
+  /* Accent — amber (performance/energy, not garish) */
+  --accent:         #f59e0b;
+  --accent-dim:     #92600a;
+  --accent-glow:    rgba(245, 158, 11, 0.15);
+
+  /* Semantic */
+  --success:  #10b981;
+  --warning:  #f59e0b;
+  --danger:   #ef4444;
+  --info:     #3b82f6;
+
+  /* Typography */
+  --font-display: 'Barlow Condensed', sans-serif;   /* headers, big numbers */
+  --font-body:    'Barlow', sans-serif;              /* UI copy              */
+  --font-mono:    'DM Mono', monospace;              /* data values          */
+
+  /* Spacing */
+  --sp-1:  4px;
+  --sp-2:  8px;
+  --sp-3:  12px;
+  --sp-4:  16px;
+  --sp-5:  20px;
+  --sp-6:  24px;
+  --sp-8:  32px;
+  --sp-10: 40px;
+  --sp-12: 48px;
+
+  /* Bottom nav height (safe area aware) */
+  --nav-height: calc(64px + env(safe-area-inset-bottom));
+
+  /* Touch target minimum */
+  --touch-target: 44px;
+
+  /* Transitions */
+  --transition-fast: 120ms ease;
+  --transition-base: 200ms ease;
+}
+
+/* ── Reset ────────────────────────────────────────────────────────────────── */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  font-size: 16px;
+  height: 100%;
+  /* Prevent text size adjustment on orientation change */
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  height: 100%;
+  background-color: var(--bg-base);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* Prevent overscroll bounce on iOS — important during workout execution */
+  overscroll-behavior: none;
+}
+
+#root {
+  height: 100%;
+}
+
+/* ── App shell ────────────────────────────────────────────────────────────── */
+
+.app-shell {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  max-width: 480px;   /* constrain on large screens */
+  margin: 0 auto;
+  position: relative;
+}
+
+.app-main {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  /* Leave room for bottom nav */
+  padding-bottom: var(--nav-height);
+  /* Prevent content from scrolling under the nav during workout */
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ── Bottom navigation ────────────────────────────────────────────────────── */
+
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 480px;
+  height: var(--nav-height);
+  padding-bottom: env(safe-area-inset-bottom);
+
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-around;
+  padding-top: var(--sp-2);
+
+  background: var(--bg-raised);
+  border-top: 1px solid var(--bg-border);
+
+  /* Elevate above session content */
+  z-index: 100;
+}
+
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-1);
+  min-width: var(--touch-target);
+  min-height: var(--touch-target);
+  padding: var(--sp-2) var(--sp-3);
+  color: var(--text-tertiary);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+.nav-item--active {
+  color: var(--accent);
+}
+
+.nav-item:hover:not(.nav-item--active) {
+  color: var(--text-secondary);
+}
+
+.nav-label {
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+/* ── Typography utilities ─────────────────────────────────────────────────── */
+
+.display-num {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+.display-label {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.mono {
+  font-family: var(--font-mono);
+}
+
+/* ── Card ─────────────────────────────────────────────────────────────────── */
+
+.card {
+  background: var(--bg-raised);
+  border: 1px solid var(--bg-border);
+  border-radius: 12px;
+  padding: var(--sp-5);
+}
+
+.card--accent {
+  border-color: var(--accent-dim);
+  background: linear-gradient(135deg, var(--bg-raised) 0%, rgba(245, 158, 11, 0.04) 100%);
+}
+
+/* ── Button ───────────────────────────────────────────────────────────────── */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2);
+  min-height: var(--touch-target);
+  padding: var(--sp-3) var(--sp-6);
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  transition: all var(--transition-fast);
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.btn--primary {
+  background: var(--accent);
+  color: #000;
+}
+
+.btn--primary:active {
+  background: #d97706;
+  transform: scale(0.98);
+}
+
+.btn--ghost {
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1px solid var(--bg-border);
+}
+
+.btn--ghost:active {
+  background: var(--bg-hover);
+}
+
+.btn--danger {
+  background: transparent;
+  color: var(--danger);
+  border: 1px solid var(--danger);
+}
+
+.btn--full {
+  width: 100%;
+}
+
+.btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ── Page wrapper ─────────────────────────────────────────────────────────── */
+
+.page {
+  padding: var(--sp-5) var(--sp-4);
+  min-height: 100%;
+}
+
+.page-header {
+  margin-bottom: var(--sp-6);
+}
+
+.page-title {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+}
+
+.page-subtitle {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  margin-top: var(--sp-1);
+}
+
+/* ── Stat block ───────────────────────────────────────────────────────────── */
+
+.stat-block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+}
+
+.stat-value {
+  font-family: var(--font-display);
+  font-size: 2.5rem;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--text-primary);
+}
+
+.stat-unit {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 400;
+  color: var(--text-secondary);
+  margin-left: var(--sp-1);
+}
+
+.stat-label {
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+}
+
+/* ── SW update banners ────────────────────────────────────────────────────── */
+
+.sw-update-banner {
+  position: fixed;
+  bottom: var(--nav-height);
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - var(--sp-8));
+  max-width: 440px;
+  background: var(--bg-raised);
+  border: 1px solid var(--accent-dim);
+  border-radius: 8px;
+  padding: var(--sp-3) var(--sp-4);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  z-index: 200;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+.sw-update-banner button {
+  font-family: var(--font-display);
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: none;
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.sw-offline-ready {
+  position: fixed;
+  bottom: calc(var(--nav-height) + var(--sp-2));
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--success);
+  color: #000;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: var(--sp-2) var(--sp-4);
+  border-radius: 999px;
+  z-index: 200;
+  animation: fade-out 3s ease 1.5s forwards;
+}
+
+@keyframes fade-out {
+  to { opacity: 0; pointer-events: none; }
+}
+
+/* ── Divider ──────────────────────────────────────────────────────────────── */
+
+.divider {
+  height: 1px;
+  background: var(--bg-border);
+  margin: var(--sp-4) 0;
+}
+
+/* ── Empty state ──────────────────────────────────────────────────────────── */
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--sp-12) var(--sp-6);
+  text-align: center;
+  gap: var(--sp-3);
+  color: var(--text-tertiary);
+}
+
+.empty-state-label {
+  font-family: var(--font-display);
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
